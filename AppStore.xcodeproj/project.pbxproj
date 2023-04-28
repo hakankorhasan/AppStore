@@ -13,6 +13,7 @@
 		7F228BE329FC0D3D00BCDFDB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F228BE129FC0D3D00BCDFDB /* Main.storyboard */; };
 		7F228BE529FC0D3E00BCDFDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F228BE429FC0D3E00BCDFDB /* Assets.xcassets */; };
 		7F228BE829FC0D3E00BCDFDB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F228BE629FC0D3E00BCDFDB /* LaunchScreen.storyboard */; };
+		7F228BF029FC0D8E00BCDFDB /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BEF29FC0D8E00BCDFDB /* MainTabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		7F228BE429FC0D3E00BCDFDB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7F228BE729FC0D3E00BCDFDB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7F228BE929FC0D3E00BCDFDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7F228BEF29FC0D8E00BCDFDB /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				7F228BE429FC0D3E00BCDFDB /* Assets.xcassets */,
 				7F228BE629FC0D3E00BCDFDB /* LaunchScreen.storyboard */,
 				7F228BE929FC0D3E00BCDFDB /* Info.plist */,
+				7F228BEF29FC0D8E00BCDFDB /* MainTabBarController.swift */,
 			);
 			path = AppStore;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F228BE029FC0D3D00BCDFDB /* ViewController.swift in Sources */,
+				7F228BF029FC0D8E00BCDFDB /* MainTabBarController.swift in Sources */,
 				7F228BDC29FC0D3D00BCDFDB /* AppDelegate.swift in Sources */,
 				7F228BDE29FC0D3D00BCDFDB /* SceneDelegate.swift in Sources */,
 			);
