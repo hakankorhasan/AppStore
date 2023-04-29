@@ -15,6 +15,9 @@
 		7F228BE829FC0D3E00BCDFDB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F228BE629FC0D3E00BCDFDB /* LaunchScreen.storyboard */; };
 		7F228BF029FC0D8E00BCDFDB /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BEF29FC0D8E00BCDFDB /* MainTabBarController.swift */; };
 		7F228BF329FC1D5900BCDFDB /* AppSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BF229FC1D5900BCDFDB /* AppSearchController.swift */; };
+		7F228BF629FC217200BCDFDB /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BF529FC217200BCDFDB /* SearchResultCell.swift */; };
+		7F228BF929FD148700BCDFDB /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BF829FD148700BCDFDB /* UIView+Layout.swift */; };
+		7F228BFB29FD183A00BCDFDB /* VerticalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BFA29FD183A00BCDFDB /* VerticalStackView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		7F228BE929FC0D3E00BCDFDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7F228BEF29FC0D8E00BCDFDB /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		7F228BF229FC1D5900BCDFDB /* AppSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSearchController.swift; sourceTree = "<group>"; };
+		7F228BF529FC217200BCDFDB /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
+		7F228BF829FD148700BCDFDB /* UIView+Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
+		7F228BFA29FD183A00BCDFDB /* VerticalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalStackView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +66,8 @@
 		7F228BDA29FC0D3D00BCDFDB /* AppStore */ = {
 			isa = PBXGroup;
 			children = (
+				7F228BF729FD146F00BCDFDB /* Helpers */,
+				7F228BF429FC215F00BCDFDB /* Views */,
 				7F228BF129FC1D3100BCDFDB /* Controller */,
 				7F228BDB29FC0D3D00BCDFDB /* AppDelegate.swift */,
 				7F228BDD29FC0D3D00BCDFDB /* SceneDelegate.swift */,
@@ -79,6 +87,23 @@
 				7F228BF229FC1D5900BCDFDB /* AppSearchController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		7F228BF429FC215F00BCDFDB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7F228BF529FC217200BCDFDB /* SearchResultCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7F228BF729FD146F00BCDFDB /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7F228BF829FD148700BCDFDB /* UIView+Layout.swift */,
+				7F228BFA29FD183A00BCDFDB /* VerticalStackView.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -156,6 +181,9 @@
 				7F228BF329FC1D5900BCDFDB /* AppSearchController.swift in Sources */,
 				7F228BF029FC0D8E00BCDFDB /* MainTabBarController.swift in Sources */,
 				7F228BDC29FC0D3D00BCDFDB /* AppDelegate.swift in Sources */,
+				7F228BF629FC217200BCDFDB /* SearchResultCell.swift in Sources */,
+				7F228BFB29FD183A00BCDFDB /* VerticalStackView.swift in Sources */,
+				7F228BF929FD148700BCDFDB /* UIView+Layout.swift in Sources */,
 				7F228BDE29FC0D3D00BCDFDB /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
