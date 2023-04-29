@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SDWebImage
 
 class AppSearchController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
@@ -21,8 +21,8 @@ class AppSearchController: UICollectionViewController, UICollectionViewDelegateF
         
         fetchITunesApps()
     }
-    
-    fileprivate var appResults = [Result]()
+
+    var appResults = [Result]()
     
     fileprivate func fetchITunesApps() {
         
@@ -51,10 +51,7 @@ class AppSearchController: UICollectionViewController, UICollectionViewDelegateF
     
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SearchResultCell
         
-        let appResult = appResults[indexPath.item]
-        cell.appName.text = appResult.trackName
-        cell.categoryName.text = appResult.primaryGenreName
-        cell.ratingsLabel.text = "\(appResult.averageUserRating ?? 0)"
+        cell.appResult = appResults[indexPath.item]
         return cell
     }
     
