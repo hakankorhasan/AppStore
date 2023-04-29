@@ -18,6 +18,7 @@
 		7F228BF629FC217200BCDFDB /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BF529FC217200BCDFDB /* SearchResultCell.swift */; };
 		7F228BF929FD148700BCDFDB /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BF829FD148700BCDFDB /* UIView+Layout.swift */; };
 		7F228BFB29FD183A00BCDFDB /* VerticalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BFA29FD183A00BCDFDB /* VerticalStackView.swift */; };
+		7F228BFE29FD21F000BCDFDB /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BFD29FD21F000BCDFDB /* SearchResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		7F228BF529FC217200BCDFDB /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		7F228BF829FD148700BCDFDB /* UIView+Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		7F228BFA29FD183A00BCDFDB /* VerticalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalStackView.swift; sourceTree = "<group>"; };
+		7F228BFD29FD21F000BCDFDB /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 		7F228BDA29FC0D3D00BCDFDB /* AppStore */ = {
 			isa = PBXGroup;
 			children = (
+				7F228BFC29FD21DA00BCDFDB /* Model */,
 				7F228BF729FD146F00BCDFDB /* Helpers */,
 				7F228BF429FC215F00BCDFDB /* Views */,
 				7F228BF129FC1D3100BCDFDB /* Controller */,
@@ -104,6 +107,14 @@
 				7F228BFA29FD183A00BCDFDB /* VerticalStackView.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		7F228BFC29FD21DA00BCDFDB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7F228BFD29FD21F000BCDFDB /* SearchResult.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -178,6 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F228BE029FC0D3D00BCDFDB /* ViewController.swift in Sources */,
+				7F228BFE29FD21F000BCDFDB /* SearchResult.swift in Sources */,
 				7F228BF329FC1D5900BCDFDB /* AppSearchController.swift in Sources */,
 				7F228BF029FC0D8E00BCDFDB /* MainTabBarController.swift in Sources */,
 				7F228BDC29FC0D3D00BCDFDB /* AppDelegate.swift in Sources */,
