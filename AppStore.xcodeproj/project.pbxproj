@@ -21,6 +21,10 @@
 		7F228BFE29FD21F000BCDFDB /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228BFD29FD21F000BCDFDB /* SearchResult.swift */; };
 		7F228C0129FD275700BCDFDB /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228C0029FD275700BCDFDB /* Service.swift */; };
 		7F228C0429FD2EE000BCDFDB /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7F228C0329FD2EE000BCDFDB /* SDWebImage */; };
+		7F228C0629FEA4D300BCDFDB /* AppsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228C0529FEA4D300BCDFDB /* AppsController.swift */; };
+		7F228C0829FEA86300BCDFDB /* AppsGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228C0729FEA86300BCDFDB /* AppsGroupCell.swift */; };
+		7F228C0A29FEAAB800BCDFDB /* AppsHorizontalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228C0929FEAAB800BCDFDB /* AppsHorizontalController.swift */; };
+		7F228C0C29FEABA300BCDFDB /* BaseListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F228C0B29FEABA300BCDFDB /* BaseListController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +43,10 @@
 		7F228BFA29FD183A00BCDFDB /* VerticalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalStackView.swift; sourceTree = "<group>"; };
 		7F228BFD29FD21F000BCDFDB /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		7F228C0029FD275700BCDFDB /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		7F228C0529FEA4D300BCDFDB /* AppsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsController.swift; sourceTree = "<group>"; };
+		7F228C0729FEA86300BCDFDB /* AppsGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsGroupCell.swift; sourceTree = "<group>"; };
+		7F228C0929FEAAB800BCDFDB /* AppsHorizontalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsHorizontalController.swift; sourceTree = "<group>"; };
+		7F228C0B29FEABA300BCDFDB /* BaseListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseListController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +101,8 @@
 			children = (
 				7F228BEF29FC0D8E00BCDFDB /* MainTabBarController.swift */,
 				7F228BF229FC1D5900BCDFDB /* AppSearchController.swift */,
+				7F228C0529FEA4D300BCDFDB /* AppsController.swift */,
+				7F228C0B29FEABA300BCDFDB /* BaseListController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -101,6 +111,8 @@
 			isa = PBXGroup;
 			children = (
 				7F228BF529FC217200BCDFDB /* SearchResultCell.swift */,
+				7F228C0729FEA86300BCDFDB /* AppsGroupCell.swift */,
+				7F228C0929FEAAB800BCDFDB /* AppsHorizontalController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -208,14 +220,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F228BE029FC0D3D00BCDFDB /* ViewController.swift in Sources */,
+				7F228C0629FEA4D300BCDFDB /* AppsController.swift in Sources */,
 				7F228BFE29FD21F000BCDFDB /* SearchResult.swift in Sources */,
 				7F228BF329FC1D5900BCDFDB /* AppSearchController.swift in Sources */,
 				7F228BF029FC0D8E00BCDFDB /* MainTabBarController.swift in Sources */,
 				7F228BDC29FC0D3D00BCDFDB /* AppDelegate.swift in Sources */,
 				7F228BF629FC217200BCDFDB /* SearchResultCell.swift in Sources */,
+				7F228C0829FEA86300BCDFDB /* AppsGroupCell.swift in Sources */,
 				7F228BFB29FD183A00BCDFDB /* VerticalStackView.swift in Sources */,
 				7F228C0129FD275700BCDFDB /* Service.swift in Sources */,
+				7F228C0C29FEABA300BCDFDB /* BaseListController.swift in Sources */,
 				7F228BF929FD148700BCDFDB /* UIView+Layout.swift in Sources */,
+				7F228C0A29FEAAB800BCDFDB /* AppsHorizontalController.swift in Sources */,
 				7F228BDE29FC0D3D00BCDFDB /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
