@@ -28,7 +28,7 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: view.frame.width, height: 275)
+        return .init(width: view.frame.width, height: 300)
     }
     
     init() {

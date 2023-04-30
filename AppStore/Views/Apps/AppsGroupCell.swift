@@ -16,7 +16,7 @@ extension UILabel {
     }
 }
 
-class AppsGroupCell: UICollectionViewCell {
+class AppsGroupCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     
     let titleLabel = UILabel(text: "Apps Section", font: .boldSystemFont(ofSize: 30))
     
@@ -25,13 +25,17 @@ class AppsGroupCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .lightGray
+        backgroundColor = .white
         addSubview(titleLabel)
-        titleLabel.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor)
+        titleLabel.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 0, left: 16, bottom: 0, right: 0))
         
         addSubview(horizontalView.view)
         horizontalView.view.backgroundColor = .blue
         horizontalView.view.anchor(top: titleLabel.bottomAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return .init(top: 16, left: 0, bottom: 0, right: 0)
     }
     
     required init?(coder: NSCoder) {
