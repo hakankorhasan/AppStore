@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import SDWebImage
 
 class AppsHorizontalController: BaseListController, UICollectionViewDelegateFlowLayout {
     
     let cellId = "id12"
+    
+    var appGroup: AppGroup?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +30,7 @@ class AppsHorizontalController: BaseListController, UICollectionViewDelegateFlow
     let lineSpacing: CGFloat = 10
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return appGroup?.feed.results.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -44,9 +47,12 @@ class AppsHorizontalController: BaseListController, UICollectionViewDelegateFlow
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
         
-        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppsRowCell
+        let app = appGroup?.feed.results[indexPath.item]
+        cell.appIconImage.sd_setImage(with: URL(string: app?.artworkUrl100 ?? ""))
+        cell.appName.text = app?.name
+        cell.companyName.text = app?.artistName
         return cell
     }
 }

@@ -22,13 +22,20 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
         fetchData()
     }
     
+    var topFreeApps: AppGroup?
+    
     fileprivate func fetchData() {
         Service.shared.fetchApps { appGroup, error in
+            
             if let error = error {
                 return
             }
             
-            print(appGroup?.feed.results)
+            self.topFreeApps = appGroup
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
     
@@ -42,11 +49,15 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return 1
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppsGroupCell
+        
+        cell.titleLabel.text = topFreeApps?.feed.title
+        cell.horizontalView.appGroup = topFreeApps
+        cell.horizontalView.collectionView.reloadData()
         return cell
     }
     

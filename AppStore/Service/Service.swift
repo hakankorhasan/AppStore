@@ -38,8 +38,13 @@ class Service {
     
     func fetchApps(completion: @escaping (AppGroup?, Error?) -> ()) {
         
-        guard let url = URL(string: "https://rss.applemarketingtools.com/api/v2/us/apps/top-free/50/apps.json") else { return }
+        //guard let url = URL(string: "https://rss.applemarketingtools.com/api/v2/us/apps/top-free/50/apps.json") else { return }
         
+        //guard let url = URL(string: "https://rss.applemarketingtools.com/api/v2/us/audio-books/top/50/audio-books.json") else { return }
+        
+        guard let url = URL(string: "https://rss.applemarketingtools.com/api/v2/us/books/top-free/50/books.json") else { return }
+
+    
         URLSession.shared.dataTask(with: url) { data, response, error in
             
             if let error = error {
