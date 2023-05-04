@@ -21,22 +21,71 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         fetchData()
     }
+        
+    var groups = [AppGroup]()
     
-    var topFreeApps: AppGroup?
-    
+    //sync
     fileprivate func fetchData() {
-        Service.shared.fetchApps { appGroup, error in
-            
-            if let error = error {
-                return
-            }
-            
-            self.topFreeApps = appGroup
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
+        
+        let dispacthGroup = DispatchGroup()
+        
+        var group1: AppGroup?
+        var group2: AppGroup?
+        var group3: AppGroup?
+        var group4: AppGroup?
+        
+        dispacthGroup.enter()
+        Service.shared.fetchTopFreeApps { appGroup, error in
+            print("top free")
+            dispacthGroup.leave()
+            group1 = appGroup
         }
+        
+        
+        dispacthGroup.enter()
+        Service.shared.fetchTopChannels { appGroup, error in
+            print("top channels")
+            dispacthGroup.leave()
+            group2 = appGroup
+        }
+        
+        dispacthGroup.enter()
+        Service.shared.fetchTopPodcasts { appGroup, error in
+            print("top podcasts")
+            dispacthGroup.leave()
+            group3 = appGroup
+        }
+        
+        dispacthGroup.enter()
+        Service.shared.fetchTopSubscriberPodcasts { appGroup, error in
+            print("top subscriber podcasts")
+            dispacthGroup.leave()
+            group4 = appGroup
+        }
+        
+        dispacthGroup.notify(queue: .main) {
+            print("completed...")
+            
+            if let group = group1 {
+                self.groups.append(group)
+            }
+            
+            if let group = group2 {
+                self.groups.append(group)
+            }
+            
+            if let group = group3 {
+                self.groups.append(group)
+            }
+            
+            if let group = group4 {
+                self.groups.append(group)
+            }
+            
+            self.collectionView.reloadData()
+            
+        }
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -45,18 +94,20 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: 300)
+        return .init(width: view.frame.width, height: 0)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return groups.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppsGroupCell
         
-        cell.titleLabel.text = topFreeApps?.feed.title
-        cell.horizontalView.appGroup = topFreeApps
+        let appGroup = groups[indexPath.item]
+        
+        cell.titleLabel.text = appGroup.feed.title
+        cell.horizontalView.appGroup = appGroup
         cell.horizontalView.collectionView.reloadData()
         return cell
     }

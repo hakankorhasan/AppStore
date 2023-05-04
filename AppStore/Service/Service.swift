@@ -36,15 +36,30 @@ class Service {
         }.resume()
     }
     
-    func fetchApps(completion: @escaping (AppGroup?, Error?) -> ()) {
-        
-        //guard let url = URL(string: "https://rss.applemarketingtools.com/api/v2/us/apps/top-free/50/apps.json") else { return }
-        
-        //guard let url = URL(string: "https://rss.applemarketingtools.com/api/v2/us/audio-books/top/50/audio-books.json") else { return }
-        
-        guard let url = URL(string: "https://rss.applemarketingtools.com/api/v2/us/books/top-free/50/books.json") else { return }
-
+    func fetchTopFreeApps(completion: @escaping (AppGroup?, Error?) -> ()) {
+        let url = "https://rss.applemarketingtools.com/api/v2/us/books/top-free/50/books.json"
+        fetchAppsGroup(urlString: url, completion: completion)
+    }
     
+    func fetchTopChannels(completion: @escaping (AppGroup?, Error?) -> ()) {
+         let url = "https://rss.applemarketingtools.com/api/v2/us/audio-books/top/50/audio-books.json"
+         fetchAppsGroup(urlString: url, completion: completion)
+    }
+    
+    func fetchTopPodcasts(completion: @escaping (AppGroup?, Error?) -> ()) {
+         let url = "https://rss.applemarketingtools.com/api/v2/us/podcasts/top/50/podcasts.json"
+         fetchAppsGroup(urlString: url, completion: completion)
+    }
+    
+    func fetchTopSubscriberPodcasts(completion: @escaping (AppGroup?, Error?) -> ()) {
+         let url = "https://rss.applemarketingtools.com/api/v2/us/podcasts/top-subscriber/50/podcasts.json"
+         fetchAppsGroup(urlString: url, completion: completion)
+    }
+    
+    func fetchAppsGroup(urlString: String, completion: @escaping (AppGroup?, Error?) -> ()) {
+        
+        guard let url = URL(string: urlString) else { return }
+        
         URLSession.shared.dataTask(with: url) { data, response, error in
             
             if let error = error {
@@ -54,9 +69,7 @@ class Service {
             guard let data = data else { return }
             
             do {
-                
                 let appGroup = try JSONDecoder().decode(AppGroup.self, from: data)
-                appGroup.feed.results.forEach({print($0.name)})
                 completion(appGroup, nil)
             } catch let err {
                 completion(nil, err)
