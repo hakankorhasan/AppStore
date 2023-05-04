@@ -18,6 +18,18 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
         self.collectionView.register(AppsGroupCell.self, forCellWithReuseIdentifier: cellId)
         
         self.collectionView.register(AppsPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        
+        fetchData()
+    }
+    
+    fileprivate func fetchData() {
+        Service.shared.fetchApps { appGroup, error in
+            if let error = error {
+                return
+            }
+            
+            print(appGroup?.feed.results)
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
