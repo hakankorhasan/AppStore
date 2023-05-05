@@ -12,6 +12,15 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
     let cellId = "id"
     let headerId = "headerId"
     
+    let activityIndicatorView: UIActivityIndicatorView = {
+        let aiv = UIActivityIndicatorView(style: .whiteLarge)
+        aiv.color = .black
+        aiv.startAnimating()
+        aiv.hidesWhenStopped = true
+        return aiv
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,10 +28,16 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         self.collectionView.register(AppsPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.fillSuperview()
+        
         fetchData()
     }
         
     var groups = [AppGroup]()
+    
+    var headerGroups = [HeaderModel]()
+    
     
     //sync
     fileprivate func fetchData() {
@@ -63,6 +78,13 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
             group4 = appGroup
         }
         
+        dispacthGroup.enter()
+        Service.shared.fetchHeaderData { headerData, error in
+            print("header data fetched")
+            dispacthGroup.leave()
+            self.headerGroups = headerData ?? []
+        }
+        
         dispacthGroup.notify(queue: .main) {
             print("completed...")
             
@@ -83,18 +105,21 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
             }
             
             self.collectionView.reloadData()
-            
+            self.activityIndicatorView.stopAnimating()
         }
         
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! AppsPageHeader
+        
+        header.appHeaderHorizontalController.headers = self.headerGroups
+        header.appHeaderHorizontalController.collectionView.reloadData()
         return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: 0)
+        return .init(width: view.frame.width, height: 350)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

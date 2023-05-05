@@ -19,7 +19,9 @@ class AppsHeaderCell: UICollectionViewCell {
         super.init(frame: frame)
         
         companyLabel.textColor = .blue
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 8
+        imageView.clipsToBounds = true
         imageView.backgroundColor = .red
         titleLabel.numberOfLines = 2
         
