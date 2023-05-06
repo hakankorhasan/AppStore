@@ -43,10 +43,10 @@ class AppSearchController: UICollectionViewController, UICollectionViewDelegateF
         timer?.invalidate()
         
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
-            Service.shared.fetchApps(searchTerm: searchText) { results, error in
+            Service.shared.fetchApps(searchTerm: searchText) { res, error in
                 if let error = error { return }
                 
-                self.appResults = results
+                self.appResults = res?.results ?? []
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -71,7 +71,7 @@ class AppSearchController: UICollectionViewController, UICollectionViewDelegateF
             
             if let err = err { return }
             
-            self.appResults = results
+            self.appResults = results?.results ?? []
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }

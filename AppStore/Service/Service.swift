@@ -11,96 +11,73 @@ class Service {
     
     static let shared = Service() //Singleton
     
-    func fetchApps(searchTerm: String, completion: @escaping ([Result], Error?) -> ()) {
+    func fetchApps(searchTerm: String, completion: @escaping (SearchResult?, Error?) -> ()) {
         
         let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&country=us&entity=software"
-        
-        guard let url = URL(string: urlString) else { return }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            
-            if let error = error {
-                completion([], nil)
-                return
-            }
-            
-            guard let data = data else { return }
-            
-            do {
-                let searchResult = try JSONDecoder().decode(SearchResult.self, from: data)
-                completion(searchResult.results, nil)
-            } catch let err {
-                print("json decode error:", err)
-                completion([], err)
-            }
-        }.resume()
+        fetchGenericJSONData(urlString: urlString, completion: completion)
     }
     
     func fetchTopFreeApps(completion: @escaping (AppGroup?, Error?) -> ()) {
         let url = "https://rss.applemarketingtools.com/api/v2/us/books/top-free/50/books.json"
-        fetchAppsGroup(urlString: url, completion: completion)
+        fetchGenericJSONData(urlString: url, completion: completion)
     }
     
     func fetchTopChannels(completion: @escaping (AppGroup?, Error?) -> ()) {
          let url = "https://rss.applemarketingtools.com/api/v2/us/audio-books/top/50/audio-books.json"
-         fetchAppsGroup(urlString: url, completion: completion)
+         fetchGenericJSONData(urlString: url, completion: completion)
     }
     
     func fetchTopPodcasts(completion: @escaping (AppGroup?, Error?) -> ()) {
          let url = "https://rss.applemarketingtools.com/api/v2/us/podcasts/top/50/podcasts.json"
-         fetchAppsGroup(urlString: url, completion: completion)
+         fetchGenericJSONData(urlString: url, completion: completion)
     }
     
     func fetchTopSubscriberPodcasts(completion: @escaping (AppGroup?, Error?) -> ()) {
          let url = "https://rss.applemarketingtools.com/api/v2/us/podcasts/top-subscriber/50/podcasts.json"
-         fetchAppsGroup(urlString: url, completion: completion)
-    }
-    
-    func fetchAppsGroup(urlString: String, completion: @escaping (AppGroup?, Error?) -> ()) {
-        
-        guard let url = URL(string: urlString) else { return }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            
-            if let error = error {
-                return
-            }
-            
-            guard let data = data else { return }
-            
-            do {
-                let appGroup = try JSONDecoder().decode(AppGroup.self, from: data)
-                completion(appGroup, nil)
-            } catch let err {
-                completion(nil, err)
-                print("failed decode", err)
-            }
-            
-        }.resume()
+         fetchGenericJSONData(urlString: url, completion: completion)
     }
     
     func fetchHeaderData(completion: @escaping ([HeaderModel]?, Error?) -> Void) {
         
-        let urlString = URL(string: "https://api.letsbuildthatapp.com/appstore/social")
+        let urlString = "https://api.letsbuildthatapp.com/appstore/social"
         
-        guard let url = urlString else { return }
+        fetchGenericJSONData(urlString: urlString, completion: completion)
+    }
+    
+    func fetchGenericJSONData<T: Decodable>(urlString: String, completion: @escaping (T?, Error?) -> ()) {
         
+        guard let url = URL(string: urlString) else { return }
+        print(T.self)
         URLSession.shared.dataTask(with: url) { data, response, error in
             
             if let error = error {
+                completion(nil, error)
                 return
             }
             
             guard let data = data else { return }
             
             do {
-                let objects = try JSONDecoder().decode([HeaderModel].self, from: data)
+                let objects = try JSONDecoder().decode(T.self, from: data)
                 completion(objects, nil)
             } catch let err {
                 completion(nil, err)
-                print("decode error:", err)
             }
         }.resume()
     }
 }
 
+class Stack<T: Decodable> {
+    var items = [T]()
+    func push(item: T) { items.append(item) }
+    func pop() -> T? { return items.last }
+}
+
+func dummyFunc() {
+    
+    let stackOfStrings = Stack<String>()
+    stackOfStrings.push(item: "has to be string")
+    
+    let stackOfInts = Stack<Int>()
+    stackOfInts.push(item: 1)
+}
