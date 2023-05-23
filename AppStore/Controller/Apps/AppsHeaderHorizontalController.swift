@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AppsHeaderHorizontalController: BaseListController, UICollectionViewDelegateFlowLayout {
+class AppsHeaderHorizontalController: HorizontalSnappingController, UICollectionViewDelegateFlowLayout {
     
     let cellId = "cellId"
     
@@ -19,10 +19,6 @@ class AppsHeaderHorizontalController: BaseListController, UICollectionViewDelega
         collectionView.backgroundColor = .white
         
         collectionView.register(AppsHeaderCell.self, forCellWithReuseIdentifier: cellId)
-        
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .horizontal
-        }
         
     }
     
