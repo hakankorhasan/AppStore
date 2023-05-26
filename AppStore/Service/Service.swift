@@ -18,12 +18,12 @@ class Service {
     }
     
     func fetchTopFreeApps(completion: @escaping (AppGroup?, Error?) -> ()) {
-        let url = "https://rss.applemarketingtools.com/api/v2/us/books/top-free/50/books.json"
+        let url = "https://rss.applemarketingtools.com/api/v2/tr/apps/top-free/10/apps.json"
         fetchGenericJSONData(urlString: url, completion: completion)
     }
     
-    func fetchTopChannels(completion: @escaping (AppGroup?, Error?) -> ()) {
-         let url = "https://rss.applemarketingtools.com/api/v2/us/audio-books/top/50/audio-books.json"
+    func fetchTopPaidApps(completion: @escaping (AppGroup?, Error?) -> ()) {
+         let url = "https://rss.applemarketingtools.com/api/v2/tr/apps/top-paid/50/apps.json"
          fetchGenericJSONData(urlString: url, completion: completion)
     }
     

@@ -58,7 +58,7 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         
         dispacthGroup.enter()
-        Service.shared.fetchTopChannels { appGroup, error in
+        Service.shared.fetchTopPaidApps { appGroup, error in
             print("top channels")
             dispacthGroup.leave()
             group2 = appGroup
@@ -135,10 +135,11 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
         cell.horizontalView.appGroup = appGroup
         cell.horizontalView.collectionView.reloadData()
         cell.horizontalView.didSelectHandler = { [weak self] feedResult in
-            let vc = AppDetailsController()
-            vc.appId = feedResult.id
-            vc.navigationItem.title = feedResult.name
-            self?.navigationController?.pushViewController(vc, animated: true)
+            let controller = AppDetailsController()
+            controller.appId = feedResult.id
+            controller.navigationItem.title = feedResult.name
+            self?.navigationController?.pushViewController(controller, animated: true)
+
         }
         return cell
     }
