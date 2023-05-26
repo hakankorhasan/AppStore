@@ -134,6 +134,12 @@ class AppsController: UICollectionViewController, UICollectionViewDelegateFlowLa
         cell.titleLabel.text = appGroup.feed.title
         cell.horizontalView.appGroup = appGroup
         cell.horizontalView.collectionView.reloadData()
+        cell.horizontalView.didSelectHandler = { [weak self] feedResult in
+            let vc = AppDetailsController()
+            vc.navigationItem.title = feedResult.name
+            
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
         return cell
     }
     
