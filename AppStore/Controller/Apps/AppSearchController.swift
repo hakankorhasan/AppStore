@@ -44,7 +44,11 @@ class AppSearchController: UICollectionViewController, UICollectionViewDelegateF
         
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
             Service.shared.fetchApps(searchTerm: searchText) { res, error in
-                if let error = error { return }
+                if let error = error {
+                    print("failed search fetch error", error)
+                    return
+                    
+                }
                 
                 self.appResults = res?.results ?? []
                 DispatchQueue.main.async {
@@ -80,6 +84,12 @@ class AppSearchController: UICollectionViewController, UICollectionViewDelegateF
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width, height: 350)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let appTrackId = String(appResults[indexPath.item].trackId)
+        let appDetailController = AppDetailsController(appId: appTrackId)
+        navigationController?.pushViewController(appDetailController, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

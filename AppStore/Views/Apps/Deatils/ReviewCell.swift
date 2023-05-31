@@ -17,6 +17,21 @@ class ReviewCell: UICollectionViewCell {
     
     let bodyLabel = UILabel(text: "Review Body\nReview Body\nReview Body\n", font: .systemFont(ofSize: 15), numberOfLines: 0)
     
+    let starsStackView: UIStackView = {
+        var arrangedSubviews = [UIView]()
+        (0..<5).forEach { (_) in
+            let imageView = UIImageView(image: #imageLiteral(resourceName: "star"))
+            imageView.constrainWidth(constant: 20)
+            imageView.constrainHeight(constant: 20)
+            arrangedSubviews.append(imageView)
+        }
+        
+        arrangedSubviews.append(UIView())
+        
+        let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
+        return stackView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -29,7 +44,7 @@ class ReviewCell: UICollectionViewCell {
             UIStackView(arrangedSubviews: [
                 titleLabel, authorLabel
                 ], customSpacing: 8),
-            starsLabel,
+            starsStackView,
             bodyLabel
             ], spacing: 12)
         
@@ -37,7 +52,7 @@ class ReviewCell: UICollectionViewCell {
         authorLabel.textAlignment = .right
         
         addSubview(stackView)
-        stackView.fillSuperview(padding: .init(top: 20, left: 20, bottom: 20, right: 20))
+        stackView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 20, left: 20, bottom: 0, right: 20))
     }
     
     required init?(coder: NSCoder) {
