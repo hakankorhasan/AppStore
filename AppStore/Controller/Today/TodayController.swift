@@ -21,12 +21,19 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         collectionView.register(TodayCell.self, forCellWithReuseIdentifier: cellId)
     }
     
+    var appFullScreenController: UIViewController!
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let redView = UIView()
-        redView.backgroundColor = .red
+        let appFullScreenController = AppFullScreenController()
+        
+        let redView = appFullScreenController.view!
         redView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleRemoveView)))
         view.addSubview(redView)
+        
+        addChild(appFullScreenController)
+        
+        self.appFullScreenController = appFullScreenController
         
         guard let cell = collectionView.cellForItem(at: indexPath) else { return }
         
@@ -38,6 +45,7 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
             redView.frame = self.view.frame
+            self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height
         }
         
     }
@@ -46,9 +54,15 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     
     @objc fileprivate func handleRemoveView(gesture: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
+            
             gesture.view?.frame = self.startingFrame ?? .zero
-        }, completion: {_ in
+            if let tabBarFrame = self.tabBarController?.tabBar.frame {
+                self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height - tabBarFrame.height
+            }
+            
+        }, completion: { _ in
             gesture.view?.removeFromSuperview()
+            self.appFullScreenController.removeFromParent()
         })
     }
     
