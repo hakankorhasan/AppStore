@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PreviewRowCell: UICollectionViewCell {
+class ReviewRowCell: UICollectionViewCell {
     
     let reviewsController = ReviewsController()
     

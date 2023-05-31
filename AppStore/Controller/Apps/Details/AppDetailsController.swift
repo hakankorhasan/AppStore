@@ -12,7 +12,7 @@ class AppDetailsController: BaseListController, UICollectionViewDelegateFlowLayo
     
     var appId: String! {
         didSet {
-            
+            print(appId)
             let url = "https://itunes.apple.com/lookup?id=\(appId ?? "")"
             Service.shared.fetchGenericJSONData(urlString: url) { (result: SearchResult?, err) in
                 
@@ -23,11 +23,31 @@ class AppDetailsController: BaseListController, UICollectionViewDelegateFlowLayo
                     self.collectionView.reloadData()
                 }
             }
+        
+            let reviewsUrl = "https://itunes.apple.com/rss/customerreviews/page=1/id=\(appId ?? "")/sortby=mostrecent/json?1=en&cc=us"
+            print(reviewsUrl)
+            Service.shared.fetchGenericJSONData(urlString: reviewsUrl) { (reviews: Reviews?, err ) in
+                
+                if let err = err {
+                    print("failed to decode reviews")
+                    return
+                }
+                
+                self.reviews = reviews
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+                
+                reviews?.feed.entry.forEach({ (entry) in
+                    print(entry.title, entry.content, entry.author)
+                })
+            }
             
         }
     }
     
     var app: Result?
+    var reviews: Reviews?
     
     var detailCellId = "detailCellId"
     var previewCellId = "previewCellId"
@@ -42,7 +62,7 @@ class AppDetailsController: BaseListController, UICollectionViewDelegateFlowLayo
         
         collectionView.register(PreviewCell.self, forCellWithReuseIdentifier: previewCellId)
         
-        collectionView.register(PreviewRowCell.self, forCellWithReuseIdentifier: previewRowCellId)
+        collectionView.register(ReviewRowCell.self, forCellWithReuseIdentifier: previewRowCellId)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -79,7 +99,8 @@ class AppDetailsController: BaseListController, UICollectionViewDelegateFlowLayo
             cell.previewScreenshotsController.app = self.app
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: previewRowCellId, for: indexPath) as! PreviewRowCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: previewRowCellId, for: indexPath) as! ReviewRowCell
+            cell.reviewsController.reviews = self.reviews
             return cell
         }
         
