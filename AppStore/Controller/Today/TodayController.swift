@@ -74,7 +74,13 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             
             self.view.layoutIfNeeded()
             
+            self.collectionView.isUserInteractionEnabled = false // animasyon başlatılırken false yaptık çünkü bitene kadar kullanıcı dokunmasını algılamasın diye. Bunun sebebi de henüz animasyon bitmeden dokunulunca appFullScreenController silinmeden ekranda kayma sorunu çıkıyor ve istenmeyen bir view daha beliriyor
+            
             self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height
+            
+            guard let cell = self.appFullScreenController.tableView.cellForRow(at: [0,0]) as? AppFullScreenHeaderCell else { return }
+            cell.todayCell.topConstraints?.constant = 48
+            cell.layoutIfNeeded()
         }
         
     }
@@ -100,10 +106,15 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
                 self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height - tabBarFrame.height
             }
             
+            guard let cell = self.appFullScreenController.tableView.cellForRow(at: [0,0]) as? AppFullScreenHeaderCell else { return }
+            cell.todayCell.topConstraints?.constant = 24
+            cell.layoutIfNeeded()
+            
         }, completion: { _ in
             //gesture.view?.removeFromSuperview()
             self.appFullScreenController.view.removeFromSuperview()
             self.appFullScreenController.removeFromParent()
+            self.collectionView.isUserInteractionEnabled = true // animasyon bitti ve kullanıcı dokunmasını aktifleştirdik
         })
     }
     

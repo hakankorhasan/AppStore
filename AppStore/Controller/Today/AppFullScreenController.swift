@@ -21,6 +21,9 @@ class AppFullScreenController: UITableViewController {
         tableView.separatorStyle = .none // satırlardaki çizgileri yok eder normal bir görünüm sağlanır
         tableView.showsVerticalScrollIndicator = false
         tableView.allowsSelection = false // cellerin tıklanınca gri olan görünümünü kapatır
+        tableView.contentInsetAdjustmentBehavior = .never // ekranın üst kısmına görüntünün yayılmasını sağlar, yani görüntü ekranın üstünü komple kapatır
+        let height = UIApplication.shared.statusBarFrame.height // status bar ın height değerini aldık
+        tableView.contentInset = .init(top: 0, left: 0, bottom: height, right: 0) // yazılar alt görünüme çok yakında daha güzel dursun diye status bar kadar boşluk verdik
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,6 +36,7 @@ class AppFullScreenController: UITableViewController {
             let headerCell = AppFullScreenHeaderCell()
             headerCell.closeButton.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
             headerCell.todayCell.todayItem = todayItem
+            headerCell.todayCell.layer.cornerRadius = 0
             return headerCell
         }
         
