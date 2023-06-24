@@ -44,6 +44,8 @@
 		7F3F216C2A04485000DB8414 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F3F216B2A04485000DB8414 /* AppGroup.swift */; };
 		7F484E032A0525FF000A4AF7 /* HeaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F484E022A0525FF000A4AF7 /* HeaderModel.swift */; };
 		7F484E072A06AF57000A4AF7 /* HorizontalSnappingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F484E062A06AF57000A4AF7 /* HorizontalSnappingController.swift */; };
+		7FACAA6E2A2E49BF00D176FC /* TodayMultipleAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FACAA6D2A2E49BF00D176FC /* TodayMultipleAppCell.swift */; };
+		7FACAA702A2E514900D176FC /* BaseTodayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FACAA6F2A2E514900D176FC /* BaseTodayCell.swift */; };
 		7FFC9E772A22A83B0072331C /* PreviewScreenshotsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FFC9E762A22A83B0072331C /* PreviewScreenshotsController.swift */; };
 		7FFC9E792A22B81C0072331C /* ReviewRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FFC9E782A22B81C0072331C /* ReviewRowCell.swift */; };
 		7FFC9E7B2A22BA8A0072331C /* ReviewsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FFC9E7A2A22BA8A0072331C /* ReviewsController.swift */; };
@@ -89,6 +91,8 @@
 		7F3F216B2A04485000DB8414 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		7F484E022A0525FF000A4AF7 /* HeaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderModel.swift; sourceTree = "<group>"; };
 		7F484E062A06AF57000A4AF7 /* HorizontalSnappingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSnappingController.swift; sourceTree = "<group>"; };
+		7FACAA6D2A2E49BF00D176FC /* TodayMultipleAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayMultipleAppCell.swift; sourceTree = "<group>"; };
+		7FACAA6F2A2E514900D176FC /* BaseTodayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTodayCell.swift; sourceTree = "<group>"; };
 		7FFC9E762A22A83B0072331C /* PreviewScreenshotsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewScreenshotsController.swift; sourceTree = "<group>"; };
 		7FFC9E782A22B81C0072331C /* ReviewRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRowCell.swift; sourceTree = "<group>"; };
 		7FFC9E7A2A22BA8A0072331C /* ReviewsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsController.swift; sourceTree = "<group>"; };
@@ -122,6 +126,8 @@
 				7F07EC962A278C04002AF9B5 /* TodayCell.swift */,
 				7F07EC9A2A27AA13002AF9B5 /* AppFullscreenDescriptionCell.swift */,
 				7F07EC9C2A28AFD7002AF9B5 /* AppFullScreenHeaderCell.swift */,
+				7FACAA6D2A2E49BF00D176FC /* TodayMultipleAppCell.swift */,
+				7FACAA6F2A2E514900D176FC /* BaseTodayCell.swift */,
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -350,6 +356,7 @@
 				7F2738752A1CF03500CA8382 /* BetterSnappingLayout.swift in Sources */,
 				7F228C0629FEA4D300BCDFDB /* AppsController.swift in Sources */,
 				7F228C1029FEB04D00BCDFDB /* AppsRowCell.swift in Sources */,
+				7FACAA702A2E514900D176FC /* BaseTodayCell.swift in Sources */,
 				7FFC9E772A22A83B0072331C /* PreviewScreenshotsController.swift in Sources */,
 				7F2738782A1E658B00CA8382 /* AppDetailsController.swift in Sources */,
 				7F3F216C2A04485000DB8414 /* AppGroup.swift in Sources */,
@@ -361,6 +368,7 @@
 				7F3F216A2A043B8100DB8414 /* AppsHeaderCell.swift in Sources */,
 				7FFC9E792A22B81C0072331C /* ReviewRowCell.swift in Sources */,
 				7F228BF329FC1D5900BCDFDB /* AppSearchController.swift in Sources */,
+				7FACAA6E2A2E49BF00D176FC /* TodayMultipleAppCell.swift in Sources */,
 				7F228BF029FC0D8E00BCDFDB /* MainTabBarController.swift in Sources */,
 				7F228BDC29FC0D3D00BCDFDB /* AppDelegate.swift in Sources */,
 				7F228BF629FC217200BCDFDB /* SearchResultCell.swift in Sources */,
