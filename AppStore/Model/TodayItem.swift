@@ -17,6 +17,8 @@ struct TodayItem {
     
     let cellType: CellType
     
+    let app: [FeedResult]
+    
     enum CellType: String {
        case single, multiple
     }

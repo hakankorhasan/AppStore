@@ -12,14 +12,29 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     //fileprivate let cellId = "cellId"
     //fileprivate let multipleApssCellId = "multipleApssCellId"
     
-    let items = [
+    /*let items = [
         TodayItem.init(category: "LIFE HACK", title: "Utilizing your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single),
         TodayItem.init(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9838578105, green: 0.9588007331, blue: 0.7274674177, alpha: 1), cellType: .single),
         TodayItem.init(category: "THE DAILY LIST", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .multiple)
-    ]
+    ]*/
+    
+    var items = [TodayItem]()
+    
+    let activityIndicatorView: UIActivityIndicatorView = {
+        let aiv = UIActivityIndicatorView(style: .large)
+        aiv.color = .darkGray
+        aiv.startAnimating()
+        aiv.hidesWhenStopped = true
+        return aiv
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.centerInSuperview()
+        
+        fetchData()
         
         navigationController?.isNavigationBarHidden = true
         
@@ -27,6 +42,47 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         
         collectionView.register(TodayCell.self, forCellWithReuseIdentifier: TodayItem.CellType.single.rawValue)
         collectionView.register(TodayMultipleAppCell.self, forCellWithReuseIdentifier: TodayItem.CellType.multiple.rawValue)
+    }
+    
+    fileprivate func fetchData() {
+        // app Group
+        
+        let dispatchGroup = DispatchGroup()
+        
+        var topPodcasts: AppGroup?
+        var topPaidApps: AppGroup?
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopPodcasts { appGroup, err in
+            print("fetch podcast")
+            topPodcasts = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopPaidApps { appGroup, err in
+            print("fetch paidApps")
+            topPaidApps = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            
+            self.activityIndicatorView.stopAnimating()
+            
+            self.items = [
+                TodayItem.init(category: "Daily List", title: topPodcasts?.feed.title ?? "", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .multiple, app: topPodcasts?.feed.results ?? []),
+                
+                TodayItem.init(category: "Daily List", title: topPaidApps?.feed.title ?? "", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .multiple, app: topPaidApps?.feed.results ?? []),
+                
+                TodayItem.init(category: "LIFE HACK", title: "Utilizing your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single, app: []),
+                
+                TodayItem.init(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9838578105, green: 0.9588007331, blue: 0.7274674177, alpha: 1), cellType: .single, app: [])
+            ]
+            
+            self.collectionView.reloadData()
+        }
+        
     }
     
     var appFullScreenController: AppFullScreenController!

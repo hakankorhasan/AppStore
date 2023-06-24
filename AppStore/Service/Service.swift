@@ -23,7 +23,7 @@ class Service {
     }
     
     func fetchTopPaidApps(completion: @escaping (AppGroup?, Error?) -> ()) {
-         let url = "https://rss.applemarketingtools.com/api/v2/tr/apps/top-paid/50/apps.json"
+         let url = "https://rss.applemarketingtools.com/api/v2/us/apps/top-paid/50/apps.json"
          fetchGenericJSONData(urlString: url, completion: completion)
     }
     
