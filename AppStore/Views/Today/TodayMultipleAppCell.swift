@@ -21,7 +21,7 @@ class TodayMultipleAppCell: BaseTodayCell {
     
     let titleLabel = UILabel(text: "Utilizing your Time", font: .boldSystemFont(ofSize: 32), numberOfLines: 2)
     
-    let multipleAppsController = UIViewController()
+    let multipleAppsController = TodayMultipleAppsController()
 
     
     override init(frame: CGRect) {
