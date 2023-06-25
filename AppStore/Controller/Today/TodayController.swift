@@ -234,9 +234,10 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
                 let apps = self.items[indexPath.item].app
                 
                 let fullScreen = TodayMultipleAppsController(mode: .fullScreen)
-                fullScreen.modalPresentationStyle = .fullScreen
-                fullScreen.feedResults = apps
-                present(fullScreen, animated: true)
+                let navCntrl = BackEnabledNavigationController(rootViewController: fullScreen)
+                navCntrl.modalPresentationStyle = .fullScreen
+                fullScreen.feedResults = self.items[indexPath.item].app
+                present(navCntrl, animated: true)
                 return
             }
             
