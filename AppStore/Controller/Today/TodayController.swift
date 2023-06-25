@@ -92,53 +92,73 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     var widthConstraint: NSLayoutConstraint?
     var heightConstraint: NSLayoutConstraint?
     
+    fileprivate func showDailyListFullscreen(_ indexPath: IndexPath) {
+        let fullScreen = TodayMultipleAppsController(mode: .fullScreen)
+        let navCntrl = BackEnabledNavigationController(rootViewController: fullScreen)
+        navCntrl.modalPresentationStyle = .fullScreen
+        fullScreen.feedResults = self.items[indexPath.item].app
+        present(navCntrl, animated: true)
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if items[indexPath.row].cellType == .multiple {
-            let fullScreen = TodayMultipleAppsController(mode: .fullScreen)
-            let navCntrl = BackEnabledNavigationController(rootViewController: fullScreen)
-            navCntrl.modalPresentationStyle = .fullScreen
-            fullScreen.feedResults = self.items[indexPath.item].app
-            present(navCntrl, animated: true)
-            return
+        switch items[indexPath.row].cellType {
+        case .multiple:
+            showDailyListFullscreen(indexPath)
+        default:
+            showSingleAppsFullscreen(indexPath: indexPath)
         }
         
+    }
+    
+    fileprivate func setupSingleAppFullscreenController(_ indexPath: IndexPath) {
         let appFullScreenController = AppFullScreenController()
         appFullScreenController.todayItem = items[indexPath.row]
         appFullScreenController.dismissHandler = {
             self.handleRemoveView()
         }
         
+        appFullScreenController.view.layer.cornerRadius = 16
+        self.appFullScreenController = appFullScreenController
+
+    }
+    
+    fileprivate func setupStartingCellFrame(_ indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+        
+        guard let startingFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
+        
+        self.startingFrame = startingFrame
+    }
+    
+    var anchorConstraints: AnchoredConstraints?
+    
+    fileprivate func setupFullScreenStartingPost(_ indexPath: IndexPath) {
         let fullscreenView = appFullScreenController.view!
      
         view.addSubview(fullscreenView)
         
         addChild(appFullScreenController)
         
-        self.appFullScreenController = appFullScreenController
-        
-        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-        
-        guard let startingFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
-        
-        self.startingFrame = startingFrame
+        setupStartingCellFrame(indexPath)
+                
+        guard let startingFrame = self.startingFrame else { return }
         
         fullscreenView.translatesAutoresizingMaskIntoConstraints = false
-        topConstraint = fullscreenView.topAnchor.constraint(equalTo: view.topAnchor, constant: startingFrame.origin.y)
-        leadingConstraint = fullscreenView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: startingFrame.origin.x)
-        widthConstraint = fullscreenView.widthAnchor.constraint(equalToConstant: startingFrame.width)
-        heightConstraint = fullscreenView.heightAnchor.constraint(equalToConstant: startingFrame.height)
         
-        [topConstraint, leadingConstraint, widthConstraint, heightConstraint].forEach{($0?.isActive = true)}
+        self.anchorConstraints = fullscreenView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: startingFrame.origin.y, left: startingFrame.origin.x, bottom: 0, right: 0), size: .init(width: startingFrame.width, height: startingFrame.height))
+        
+        
         self.view.layoutIfNeeded()
-        fullscreenView.layer.cornerRadius = 16
-        
+    }
+    
+    fileprivate func beginAppFulscreenAnimate() {
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
             
-            self.topConstraint?.constant = 0
-            self.leadingConstraint?.constant = 0
-            self.widthConstraint?.constant = self.view.frame.width
-            self.heightConstraint?.constant = self.view.frame.height
+            self.anchorConstraints?.top?.constant = 0
+            self.anchorConstraints?.leading?.constant = 0
+            self.anchorConstraints?.width?.constant = self.view.frame.width
+            self.anchorConstraints?.height?.constant = self.view.frame.height
             
             self.view.layoutIfNeeded()
             
@@ -150,6 +170,19 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             cell.todayCell.topConstraints?.constant = 48
             cell.layoutIfNeeded()
         }
+        
+    }
+    
+    fileprivate func showSingleAppsFullscreen(indexPath: IndexPath) {
+       
+        // #1
+        setupSingleAppFullscreenController(indexPath)
+        
+        // #2
+        setupFullScreenStartingPost(indexPath)
+        
+        // #3
+        beginAppFulscreenAnimate()
         
     }
     
@@ -169,10 +202,10 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             
             self.appFullScreenController.tableView.scrollToRow(at: [0,0], at: .top, animated: true)
             
-            self.topConstraint?.constant = startingFrame.origin.y
-            self.leadingConstraint?.constant = startingFrame.origin.x
-            self.widthConstraint?.constant = startingFrame.width
-            self.heightConstraint?.constant = startingFrame.height
+            self.anchorConstraints?.top?.constant = startingFrame.origin.y
+            self.anchorConstraints?.leading?.constant = startingFrame.origin.x
+            self.anchorConstraints?.width?.constant = startingFrame.width
+            self.anchorConstraints?.height?.constant = startingFrame.height
             
             self.view.layoutIfNeeded()
            
