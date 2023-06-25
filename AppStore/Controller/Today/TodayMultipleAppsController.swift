@@ -28,8 +28,11 @@ class TodayMultipleAppsController: BaseListController, UICollectionViewDelegateF
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.modalPresentationCapturesStatusBarAppearance = true
+        
         if mode == .fullScreen {
             setupCloseButton()
+            navigationController?.isNavigationBarHidden = true
         } else {
             collectionView.isScrollEnabled = false
         }
@@ -43,10 +46,15 @@ class TodayMultipleAppsController: BaseListController, UICollectionViewDelegateF
     
     override var prefersStatusBarHidden: Bool { return true }
     
-    
     private func setupCloseButton() {
         view.addSubview(closeButton)
         closeButton.anchor(top: view.topAnchor, leading: nil, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 20, left: 0, bottom: 0, right: 16), size: .init(width: 44, height: 44))
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let appId = self.feedResults[indexPath.item].id
+        let appDetail = AppDetailsController(appId: appId)
+        navigationController?.pushViewController(appDetail, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

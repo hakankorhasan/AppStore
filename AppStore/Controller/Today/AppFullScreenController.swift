@@ -9,7 +9,6 @@ import UIKit
 
 class AppFullScreenController: UITableViewController {
     
-    
     var dismissHandler: (() -> ())?
     
     var todayItem: TodayItem?

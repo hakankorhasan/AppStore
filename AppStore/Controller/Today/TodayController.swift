@@ -53,7 +53,7 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         var topPaidApps: AppGroup?
         
         dispatchGroup.enter()
-        Service.shared.fetchTopPodcasts { appGroup, err in
+        Service.shared.fetchTopFreeApps { appGroup, err in
             print("fetch podcast")
             topPodcasts = appGroup
             dispatchGroup.leave()
@@ -96,9 +96,10 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         
         if items[indexPath.row].cellType == .multiple {
             let fullScreen = TodayMultipleAppsController(mode: .fullScreen)
+            let navCntrl = BackEnabledNavigationController(rootViewController: fullScreen)
+            navCntrl.modalPresentationStyle = .fullScreen
             fullScreen.feedResults = self.items[indexPath.item].app
-            fullScreen.modalPresentationStyle = .fullScreen
-            present(fullScreen, animated: true)
+            present(navCntrl, animated: true)
             return
         }
         
@@ -150,6 +151,12 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             cell.layoutIfNeeded()
         }
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.superview?.setNeedsLayout()
     }
     
     var startingFrame: CGRect?
@@ -207,7 +214,34 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             cell.todayItem = items[indexPath.item]
         }*/
         
+        (cell as? TodayMultipleAppCell)?.multipleAppsController.collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleMultipleApps)))
+        
         return cell
+        
+    }
+    
+    @objc fileprivate func handleMultipleApps(gesture: UIGestureRecognizer) {
+        
+        let collectionView = gesture.view
+        
+        var superview = collectionView?.superview
+      //  let apps = self.items[indexPath.item].app
+        while superview != nil {
+            
+            if let cell = superview as? TodayMultipleAppCell {
+                guard let indexPath = self.collectionView.indexPath(for: cell) else { return }
+                
+                let apps = self.items[indexPath.item].app
+                
+                let fullScreen = TodayMultipleAppsController(mode: .fullScreen)
+                fullScreen.modalPresentationStyle = .fullScreen
+                fullScreen.feedResults = apps
+                present(fullScreen, animated: true)
+                return
+            }
+            
+            superview = superview?.superview
+        }
         
     }
     
