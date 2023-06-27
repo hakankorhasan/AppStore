@@ -40,6 +40,49 @@ class AppFullScreenController: UIViewController, UITableViewDelegate, UITableVie
         tableView.contentInsetAdjustmentBehavior = .never // ekranın üst kısmına görüntünün yayılmasını sağlar, yani görüntü ekranın üstünü komple kapatır
         let height = UIApplication.shared.statusBarFrame.height // status bar ın height değerini aldık
         tableView.contentInset = .init(top: 0, left: 0, bottom: height, right: 0) // yazılar alt görünüme çok yakında daha güzel dursun diye status bar kadar boşluk verdik
+        
+        setupFloatingControls()
+    }
+    
+    fileprivate func setupFloatingControls() {
+        let floatingView = UIView()
+        floatingView.layer.cornerRadius = 16
+        floatingView.clipsToBounds = true
+        
+        let bottomPadding = UIApplication.shared.statusBarFrame.height
+        
+        view.addSubview(floatingView)
+        floatingView.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 18, bottom: bottomPadding, right: 18), size: .init(width: 0, height: 80))
+        
+        let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+        floatingView.addSubview(blurEffectView)
+        blurEffectView.fillSuperview()
+        
+        let imageView = UIImageView(cornerRadius: 16)
+        imageView.image = todayItem?.image
+        imageView.constrainWidth(constant: 64)
+        imageView.constrainHeight(constant: 64)
+        
+        let getButton = UIButton(title: "GET")
+        getButton.layer.cornerRadius = 16
+        getButton.setTitleColor(.white, for: .normal)
+        getButton.constrainWidth(constant: 80)
+        getButton.constrainHeight(constant: 32)
+        getButton.backgroundColor = .darkGray
+        getButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        
+        let stackView = UIStackView(arrangedSubviews: [
+            imageView,
+            VerticalStackView(arrangedSubviews: [
+                UILabel(text: "Life Hack", font: .boldSystemFont(ofSize: 18)),
+                UILabel(text: "Utilizing your time", font: .systemFont(ofSize: 16))
+            ], spacing: 5),
+            getButton
+        ], customSpacing: 16)
+        
+        floatingView.addSubview(stackView)
+        stackView.fillSuperview(padding: .init(top: 0, left: 16, bottom: 0, right: 16))
+        stackView.alignment = .center
     }
     
     let closeButton: UIButton = {
