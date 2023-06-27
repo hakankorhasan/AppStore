@@ -28,6 +28,7 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout, U
         return aiv
     }()
     
+    
     let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
     
     override func viewDidLoad() {
@@ -259,7 +260,7 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout, U
             
             guard let cell = self.appFullScreenController.tableView.cellForRow(at: [0,0]) as? AppFullScreenHeaderCell else { return }
             cell.todayCell.topConstraints?.constant = 24
-            cell.closeButton.alpha = 0
+           // cell.closeButton.alpha = 0
             cell.layoutIfNeeded()
             
         }, completion: { _ in
