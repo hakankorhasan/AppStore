@@ -77,13 +77,12 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout, U
             self.activityIndicatorView.stopAnimating()
             
             self.items = [
+                TodayItem.init(category: "LIFE HACK", title: "Utilizing your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single, app: []),
+                
+                TodayItem.init(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9838578105, green: 0.9588007331, blue: 0.7274674177, alpha: 1), cellType: .single, app: []),
                 TodayItem.init(category: "Daily List", title: topPodcasts?.feed.title ?? "", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .multiple, app: topPodcasts?.feed.results ?? []),
                 
                 TodayItem.init(category: "Daily List", title: topPaidApps?.feed.title ?? "", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .multiple, app: topPaidApps?.feed.results ?? []),
-                
-                TodayItem.init(category: "LIFE HACK", title: "Utilizing your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single, app: []),
-                
-                TodayItem.init(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9838578105, green: 0.9588007331, blue: 0.7274674177, alpha: 1), cellType: .single, app: [])
             ]
             
             self.collectionView.reloadData()
@@ -143,13 +142,21 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout, U
         
         if gesture.state == .changed {
             
-            let scale = 1 - translationY / 1000
-            let transfrom: CGAffineTransform = .init(scaleX: scale, y: scale)
-            self.appFullScreenController.view.transform = transfrom
+            if translationY > 0 {
+                var scale = 1 - translationY / 1000
+                scale = min(1, scale)
+                scale = max(0.5, scale)
+                let transfrom: CGAffineTransform = .init(scaleX: scale, y: scale)
+                self.appFullScreenController.view.transform = transfrom
+            }
             
         } else if gesture.state == .ended {
-            
-            handleAppFullScreenDismissal()
+             
+            if translationY > 0  && translationY > 200 {
+                handleAppFullScreenDismissal()
+            } else {
+                self.appFullScreenController.view.transform = .identity
+            }
             
         }
         
@@ -252,6 +259,7 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout, U
             
             guard let cell = self.appFullScreenController.tableView.cellForRow(at: [0,0]) as? AppFullScreenHeaderCell else { return }
             cell.todayCell.topConstraints?.constant = 24
+            cell.closeButton.alpha = 0
             cell.layoutIfNeeded()
             
         }, completion: { _ in
