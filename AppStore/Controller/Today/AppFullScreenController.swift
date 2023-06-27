@@ -19,6 +19,13 @@ class AppFullScreenController: UIViewController, UITableViewDelegate, UITableVie
             scrollView.isScrollEnabled = false
             scrollView.isScrollEnabled = true
         }
+        
+        let transform = scrollView.contentOffset.y > 100 ? CGAffineTransform(translationX: 0, y: -self.bottomPadding-90) : .identity
+        
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
+            self.floatingView.transform = transform
+        }
+    
     }
     
     let tableView = UITableView(frame: .zero, style: .plain)
@@ -44,15 +51,25 @@ class AppFullScreenController: UIViewController, UITableViewDelegate, UITableVie
         setupFloatingControls()
     }
     
+    @objc fileprivate func handleTap() {
+        
+    }
+    
+    let floatingView = UIView()
+    let bottomPadding = UIApplication.shared.statusBarFrame.height
+    
+    
     fileprivate func setupFloatingControls() {
-        let floatingView = UIView()
+        
+        let gestureRecog = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(gestureRecog)
+        
         floatingView.layer.cornerRadius = 16
         floatingView.clipsToBounds = true
         
-        let bottomPadding = UIApplication.shared.statusBarFrame.height
         
         view.addSubview(floatingView)
-        floatingView.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 18, bottom: bottomPadding, right: 18), size: .init(width: 0, height: 80))
+        floatingView.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 18, bottom: -90, right: 18), size: .init(width: 0, height: 80))
         
         let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         floatingView.addSubview(blurEffectView)
