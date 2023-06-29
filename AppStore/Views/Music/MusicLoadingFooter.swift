@@ -7,14 +7,16 @@
 
 import UIKit
 
-class MusicLoadingFooter: UICollectionViewCell {
+class MusicLoadingFooter: UICollectionReusableView {
+    
+    let label = UILabel(text: "Loading more...", font: .boldSystemFont(ofSize: 16))
+    
+    let aiv = UIActivityIndicatorView(style: .large)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let label = UILabel(text: "Loading more...", font: .boldSystemFont(ofSize: 16))
         
-        let aiv = UIActivityIndicatorView(style: .large)
         aiv.color = .darkGray
         aiv.startAnimating()
         
