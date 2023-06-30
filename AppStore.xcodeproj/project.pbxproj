@@ -48,6 +48,7 @@
 		7F3F216C2A04485000DB8414 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F3F216B2A04485000DB8414 /* AppGroup.swift */; };
 		7F484E032A0525FF000A4AF7 /* HeaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F484E022A0525FF000A4AF7 /* HeaderModel.swift */; };
 		7F484E072A06AF57000A4AF7 /* HorizontalSnappingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F484E062A06AF57000A4AF7 /* HorizontalSnappingController.swift */; };
+		7F6CEC772A4EDD4F00F47DA7 /* AppCompositionalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CEC762A4EDD4F00F47DA7 /* AppCompositionalView.swift */; };
 		7F80491B2A47330100F891DA /* TodayMultipleAppsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F80491A2A47330100F891DA /* TodayMultipleAppsController.swift */; };
 		7F80491D2A4733B600F891DA /* MultipleAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F80491C2A4733B600F891DA /* MultipleAppCell.swift */; };
 		7FACAA6E2A2E49BF00D176FC /* TodayMultipleAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FACAA6D2A2E49BF00D176FC /* TodayMultipleAppCell.swift */; };
@@ -101,6 +102,7 @@
 		7F3F216B2A04485000DB8414 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		7F484E022A0525FF000A4AF7 /* HeaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderModel.swift; sourceTree = "<group>"; };
 		7F484E062A06AF57000A4AF7 /* HorizontalSnappingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSnappingController.swift; sourceTree = "<group>"; };
+		7F6CEC762A4EDD4F00F47DA7 /* AppCompositionalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCompositionalView.swift; sourceTree = "<group>"; };
 		7F80491A2A47330100F891DA /* TodayMultipleAppsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayMultipleAppsController.swift; sourceTree = "<group>"; };
 		7F80491C2A4733B600F891DA /* MultipleAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleAppCell.swift; sourceTree = "<group>"; };
 		7FACAA6D2A2E49BF00D176FC /* TodayMultipleAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayMultipleAppCell.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				7F228BF229FC1D5900BCDFDB /* AppSearchController.swift */,
 				7F228C0529FEA4D300BCDFDB /* AppsController.swift */,
 				7F3F21672A04373400DB8414 /* AppsHeaderHorizontalController.swift */,
+				7F6CEC762A4EDD4F00F47DA7 /* AppCompositionalView.swift */,
 			);
 			path = Apps;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 				7F228C0C29FEABA300BCDFDB /* BaseListController.swift in Sources */,
 				7F228BF929FD148700BCDFDB /* UIView+Layout.swift in Sources */,
 				7F07EC912A276C78002AF9B5 /* Reviews.swift in Sources */,
+				7F6CEC772A4EDD4F00F47DA7 /* AppCompositionalView.swift in Sources */,
 				7F27387A2A20D92100CA8382 /* Extensions.swift in Sources */,
 				7F27387D2A20DA8100CA8382 /* AppDetailCell.swift in Sources */,
 				7F484E072A06AF57000A4AF7 /* HorizontalSnappingController.swift in Sources */,
