@@ -7,6 +7,6 @@
 
 import UIKit
 
-struct HeaderModel: Decodable {
+struct HeaderModel: Decodable, Hashable {
     let id, name, imageUrl, tagline: String
 }

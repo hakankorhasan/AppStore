@@ -58,6 +58,15 @@ class CompositionalController: UICollectionViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    var socialApps = [HeaderModel]()
+    var appGroup: AppGroup?
+    var paidApp: AppGroup?
+    var freeApps: AppGroup?
+    
+    private func fetchApps() {
+        fetchAppsDispatchGroup()
+    }
+    
     class CompositionalHeader: UICollectionReusableView {
         
         let label = UILabel(text: "Editors' Choice Games", font: .boldSystemFont(ofSize: 32))
@@ -77,6 +86,20 @@ class CompositionalController: UICollectionViewController {
         
     }
     
+    enum AppSection {
+        case topSocial
+        case grossing
+    }
+    
+    lazy var diffableDataSource: UICollectionViewDiffableDataSource<AppSection, HeaderModel> = .init(collectionView: self.collectionView) {
+        (collectionView, indexPath, socialApp) -> UICollectionViewCell? in
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AppsHeaderCell
+        cell.app = socialApp
+        
+        return cell
+    }
+    
     let headerId = "headerId"
     
     override func viewDidLoad() {
@@ -91,27 +114,22 @@ class CompositionalController: UICollectionViewController {
         
         collectionView.register(AppsRowCell.self, forCellWithReuseIdentifier: "smallCellId")
         
-        fetchApps()
+        setupDiffableDatasource()
     }
     
-    var socialApps = [HeaderModel]()
-    var appGroup: AppGroup?
-    
-    private func fetchApps() {
+    private func setupDiffableDatasource() {
         
-        Service.shared.fetchHeaderData { apps, err in
-            
-            self.socialApps = apps ?? []
-            Service.shared.fetchTopFreeApps { appGroups, err in
-                self.appGroup = appGroups
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
-            }
+        collectionView.dataSource = diffableDataSource
+        
+        Service.shared.fetchHeaderData { (socialApps, err) in
+            var snapshot = self.diffableDataSource.snapshot()
+            snapshot.appendSections([.topSocial])
+            snapshot.appendItems(socialApps ?? [], toSection: .topSocial)
+            self.diffableDataSource.apply(snapshot)
         }
     }
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+  
+    /*override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             let appId = socialApps[indexPath.item].id
             let appDetailController = AppDetailsController(appId: appId)
@@ -121,25 +139,38 @@ class CompositionalController: UICollectionViewController {
             let appDetailController = AppDetailsController(appId: appId)
             navigationController?.pushViewController(appDetailController, animated: true)
         }
-    }
+    }*/
+    
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! CompositionalHeader
+        
+         var title: String?
+        
+         if indexPath.section == 1 {
+             title = appGroup?.feed.title
+         } else if indexPath.section == 2 {
+             title = paidApp?.feed.title
+         } else {
+             title = freeApps?.feed.title
+         }
+         header.label.text = title
+        
         return header
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    /*override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return socialApps.count
         }
         return appGroup?.feed.results.count ?? 0
-    }
+    }*/
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 0
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    /*override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         switch indexPath.section {
         case 0:
@@ -158,6 +189,59 @@ class CompositionalController: UICollectionViewController {
             return cell
         }
         
+    }*/
+}
+
+extension CompositionalController {
+    func fetchAppsSynchronously() {
+        Service.shared.fetchHeaderData { apps, err in
+            self.socialApps = apps ?? []
+            Service.shared.fetchTopFreeApps { freeApps, err in
+                self.appGroup = freeApps
+                Service.shared.fetchTopPaidApps { paidApps, err in
+                    self.paidApp = paidApps
+                    Service.shared.fetchAppGroup(urlString: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-free/all/25/explicit.json") { (appGroup, err) in
+                        self.freeApps = appGroup
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func fetchAppsDispatchGroup() {
+        
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        Service.shared.fetchHeaderData { appGroup, error in
+            self.socialApps = appGroup ?? []
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopFreeApps { appGroup, error in
+            self.appGroup = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopPaidApps { appGroup, error in
+            self.paidApp = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchAppGroup(urlString: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-free/all/25/explicit.json") { (appGroup, err) in
+            self.freeApps = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            self.collectionView.reloadData()
+        }
     }
 }
 
