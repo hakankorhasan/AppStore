@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImage
 
 class CompositionalController: UICollectionViewController {
     
@@ -45,7 +46,7 @@ class CompositionalController: UICollectionViewController {
         item.contentInsets.bottom = 16
         item.contentInsets.trailing = 16
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(0.9), heightDimension: .absolute(300)), subitems: [item])
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(0.9), heightDimension: .absolute(350)), subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPaging // horizontal olabilmesi için yapıyoruz
@@ -89,6 +90,37 @@ class CompositionalController: UICollectionViewController {
         collectionView.register(AppsHeaderCell.self, forCellWithReuseIdentifier: "cellId")
         
         collectionView.register(AppsRowCell.self, forCellWithReuseIdentifier: "smallCellId")
+        
+        fetchApps()
+    }
+    
+    var socialApps = [HeaderModel]()
+    var appGroup: AppGroup?
+    
+    private func fetchApps() {
+        
+        Service.shared.fetchHeaderData { apps, err in
+            
+            self.socialApps = apps ?? []
+            Service.shared.fetchTopFreeApps { appGroups, err in
+                self.appGroup = appGroups
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            let appId = socialApps[indexPath.item].id
+            let appDetailController = AppDetailsController(appId: appId)
+            navigationController?.pushViewController(appDetailController, animated: true)
+        } else if indexPath.section == 1 {
+            let appId = self.appGroup?.feed.results[indexPath.item].id ?? ""
+            let appDetailController = AppDetailsController(appId: appId)
+            navigationController?.pushViewController(appDetailController, animated: true)
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -97,22 +129,32 @@ class CompositionalController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        if section == 0 {
+            return socialApps.count
+        }
+        return appGroup?.feed.results.count ?? 0
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
+        return 2
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         switch indexPath.section {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath)
-            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AppsHeaderCell
+            let socialApps = self.socialApps[indexPath.item]
+            cell.titleLabel.text = socialApps.tagline
+            cell.companyLabel.text = socialApps.name
+            cell.imageView.sd_setImage(with: URL(string: socialApps.imageUrl))
             return cell
         default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath) as! AppsRowCell
+            let smallApps = self.appGroup?.feed.results[indexPath.item]
+            cell.appIconImage.sd_setImage(with: URL(string: smallApps?.artworkUrl100 ?? ""))
+            cell.appName.text = smallApps?.name
+            cell.companyName.text = smallApps?.artistName
             return cell
         }
         
