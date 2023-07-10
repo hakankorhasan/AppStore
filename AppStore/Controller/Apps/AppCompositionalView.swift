@@ -90,6 +90,7 @@ class CompositionalController: UICollectionViewController {
         case topSocial
         case grossing
         case free
+        case topSubscribers
     }
     
     lazy var diffableDataSource: UICollectionViewDiffableDataSource<AppSection, AnyHashable> = .init(collectionView: self.collectionView) {
@@ -149,7 +150,37 @@ class CompositionalController: UICollectionViewController {
         
         collectionView.register(AppsRowCell.self, forCellWithReuseIdentifier: "smallCellId")
         
+        navigationItem.rightBarButtonItem = .init(title: "Fetch Subscriber", style: .plain, target: self, action: #selector(fetchApp))
+        
+        collectionView.refreshControl = UIRefreshControl()
+        collectionView.refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         setupDiffableDatasource()
+    }
+    
+    @objc fileprivate func handleRefresh() {
+        
+        collectionView.refreshControl?.endRefreshing()
+        
+        var snapshot = diffableDataSource.snapshot()
+        
+        snapshot.deleteSections([.topSubscribers])
+        
+        diffableDataSource.apply(snapshot)
+    }
+    
+    @objc func fetchApp() {
+        
+        Service.shared.fetchAppGroup(urlString: "https://rss.applemarketingtools.com/api/v2/us/podcasts/top-subscriber/50/podcasts.json") { (appGroup, err) in
+            
+            var snapshot = self.diffableDataSource.snapshot()
+            snapshot.insertSections([.topSubscribers], afterSection: .topSocial)
+            
+            snapshot.appendItems(appGroup?.feed.results ?? [], toSection: .topSubscribers)
+            
+            self.diffableDataSource.apply(snapshot)
+            
+            
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -179,8 +210,10 @@ class CompositionalController: UICollectionViewController {
             
             if section == .grossing {
                 header.label.text = "Top Paid Apps"
-            } else {
+            } else if section == .free{
                 header.label.text = "Top Free Apps"
+            } else {
+                header.label.text = "Top Subscribers"
             }
             
             return header
