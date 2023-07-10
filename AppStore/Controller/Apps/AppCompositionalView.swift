@@ -89,15 +89,24 @@ class CompositionalController: UICollectionViewController {
     enum AppSection {
         case topSocial
         case grossing
+        case free
     }
     
-    lazy var diffableDataSource: UICollectionViewDiffableDataSource<AppSection, HeaderModel> = .init(collectionView: self.collectionView) {
-        (collectionView, indexPath, socialApp) -> UICollectionViewCell? in
+    lazy var diffableDataSource: UICollectionViewDiffableDataSource<AppSection, AnyHashable> = .init(collectionView: self.collectionView) {
+        (collectionView, indexPath, object) -> UICollectionViewCell? in
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AppsHeaderCell
-        cell.app = socialApp
+        if let object = object as? HeaderModel {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AppsHeaderCell
+            cell.app = object
+            
+            return cell
+        } else if let object = object as? FeedResult {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath) as! AppsRowCell
+            cell.app = object
+            return cell
+        }
         
-        return cell
+        return nil
     }
     
     let headerId = "headerId"
@@ -121,11 +130,43 @@ class CompositionalController: UICollectionViewController {
         
         collectionView.dataSource = diffableDataSource
         
+        diffableDataSource.supplementaryViewProvider = .some({ collectionView, elementKind, indexPath in
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: self.headerId, for: indexPath) as! CompositionalHeader
+            
+            let snapshot = self.diffableDataSource.snapshot()
+            let object = self.diffableDataSource.itemIdentifier(for: indexPath)
+            let section = snapshot.sectionIdentifier(containingItem: object!)
+            
+            if section == .grossing {
+                header.label.text = "Top Podcasts"
+            } else {
+                header.label.text = "Top Free Apps"
+            }
+            
+            return header
+        })
+        
         Service.shared.fetchHeaderData { (socialApps, err) in
-            var snapshot = self.diffableDataSource.snapshot()
-            snapshot.appendSections([.topSocial])
-            snapshot.appendItems(socialApps ?? [], toSection: .topSocial)
-            self.diffableDataSource.apply(snapshot)
+            
+            Service.shared.fetchTopPodcasts { appGroup, err in
+                
+                Service.shared.fetchTopFreeApps { freeApps, err in
+                    
+                    var snapshot = self.diffableDataSource.snapshot()
+                    
+                    snapshot.appendSections([.topSocial, .grossing, .free])
+                    snapshot.appendItems(socialApps ?? [], toSection: .topSocial)
+                    
+                    let objects = appGroup?.feed.results ?? []
+                    snapshot.appendItems(objects, toSection: .grossing)
+                    
+                    snapshot.appendItems(freeApps?.feed.results ?? [], toSection: .free)
+                    
+                    self.diffableDataSource.apply(snapshot)
+                }
+            
+            }
+            
         }
     }
   

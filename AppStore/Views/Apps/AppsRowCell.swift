@@ -9,6 +9,14 @@ import UIKit
 
 class AppsRowCell: UICollectionViewCell {
     
+    var app: FeedResult! {
+        didSet {
+            appIconImage.sd_setImage(with: URL(string: app.artworkUrl100))
+            appName.text = app.name
+            companyName.text = app.artistName
+        }
+    }
+    
     let appIconImage: UIImageView = {
        let imv = UIImageView()
         imv.widthAnchor.constraint(equalToConstant: 64).isActive = true
