@@ -103,10 +103,36 @@ class CompositionalController: UICollectionViewController {
         } else if let object = object as? FeedResult {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath) as! AppsRowCell
             cell.app = object
+            
+            cell.getButton.addTarget(self, action: #selector(self.handleGet), for: .primaryActionTriggered)
+            
             return cell
         }
         
         return nil
+    }
+    
+    @objc func handleGet(button: UIView) {
+        
+        var superview = button.superview
+        
+        while superview != nil {
+            
+            if let cell = superview as? UICollectionViewCell {
+                
+                guard let indexPath = self.collectionView.indexPath(for: cell) else { return }
+                
+                guard let objectIClickedOnto = diffableDataSource.itemIdentifier(for: indexPath) else { return }
+                
+                var snapshot = diffableDataSource.snapshot()
+                snapshot.deleteItems([objectIClickedOnto])
+                
+                diffableDataSource.apply(snapshot)
+                print(objectIClickedOnto)
+                
+            }
+            superview = superview?.superview
+        }
     }
     
     let headerId = "headerId"
@@ -126,6 +152,20 @@ class CompositionalController: UICollectionViewController {
         setupDiffableDatasource()
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let object = diffableDataSource.itemIdentifier(for: indexPath)
+        
+        if let object = object as? HeaderModel {
+            let appDetailController = AppDetailsController(appId: object.id)
+            navigationController?.pushViewController(appDetailController, animated: true)
+        } else if let object = object as? FeedResult {
+            let appDetailController = AppDetailsController(appId: object.id)
+            print(object.id)
+            navigationController?.pushViewController(appDetailController, animated: true)
+        }
+    }
+    
     private func setupDiffableDatasource() {
         
         collectionView.dataSource = diffableDataSource
@@ -138,7 +178,7 @@ class CompositionalController: UICollectionViewController {
             let section = snapshot.sectionIdentifier(containingItem: object!)
             
             if section == .grossing {
-                header.label.text = "Top Podcasts"
+                header.label.text = "Top Paid Apps"
             } else {
                 header.label.text = "Top Free Apps"
             }
@@ -148,7 +188,7 @@ class CompositionalController: UICollectionViewController {
         
         Service.shared.fetchHeaderData { (socialApps, err) in
             
-            Service.shared.fetchTopPodcasts { appGroup, err in
+            Service.shared.fetchTopPaidApps { appGroup, err in
                 
                 Service.shared.fetchTopFreeApps { freeApps, err in
                     
